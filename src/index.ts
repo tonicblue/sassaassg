@@ -20,23 +20,25 @@ export function runTests () {
   const scssFiles = FS.readdirSync(scssFilesDirectory);
 
   for (const scssFile of scssFiles)
-    if (!scssFile.endsWith('.scss')) continue;
-    else parseFile(Path.join(scssFilesDirectory, scssFile));
+    if (scssFile.endsWith('.scss'))
+      parseFile(Path.join(scssFilesDirectory, scssFile));
 }
 
 export function parseFile (path: string) {
-  const scss = FS.readFileSync(path).toString();
+  const basename = Path.basename(path, '.scss');
+  const dirname = Path.dirname(path);
+  const outputHtmlPath = Path.join(dirname, `${basename}.html`);
+  const outputAstPath = Path.join(dirname, `${basename}.json`);
 
-  console.log(`Parsing ${path} (${scss.length} bytes)`);
+  console.log(`Parsing file ${path} -> ${basename}.html & ${basename}.json`);
+
+  const scss = FS.readFileSync(path).toString();
   const [html, ast] = parse(scss);
 
-  const outputHtmlPath = `${path}.html`;
-  console.log(`Writing HTML to ${outputHtmlPath} (${html.length} bytes)`);
   FS.writeFileSync(outputHtmlPath, html);
 
-  const outputAstPath = `${path}.json`;
   const astJson = ast.toJson();
-  console.log(`Writing AST JSON to ${outputAstPath} (${astJson.length} bytes)`);
+
   FS.writeFileSync(outputAstPath, astJson);
 
   return [html, ast];
@@ -45,7 +47,7 @@ export function parseFile (path: string) {
 export function parse (scss: string): [string, Node] {
   const ast = Gonzales.parse(scss, { syntax: 'scss' });
   const marked = new Marked();
-  const domRoot: DomNode = ['<html>', '</html>'];
+  const domRoot: DomNode = ['', ''];
   const domNodeStack: DomNodeStack = [[0, domRoot]];
 
   ast.traverse((node, index, parent, level) => {
@@ -158,6 +160,9 @@ function flatten (domNode: DomNode) {
 function recursiveFlatten (domNode: DomNode) {
   const html: string[] = [];
 
+  if (domNode[0] === '') domNode.shift();
+  if (domNode[domNode.length - 1] === '') domNode.pop();
+
   recurse(domNode);
 
   return html.join('\n');
@@ -186,6 +191,7 @@ function recursiveFlatten (domNode: DomNode) {
     for (let index = 1; index < domNode.length - 1; index++)
       recurse(domNode[index], level + 1);
 
-    recurse(domNode[domNode.length - 1], level);
+    if (domNode.length > 2)
+      recurse(domNode[domNode.length - 1], level);
   }
 }

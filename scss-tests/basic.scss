@@ -1,51 +1,53 @@
-head {
-  title { /* Home */ }
-}
+html {
+  head {
+    title { /* Home */ }
+  }
 
-body.home.default-theme {
-  nav {
-    a[href="/"] {
-      img[src="/images/logo.png"] { }
-      // SassaaSSG
+  body.home.default-theme {
+    nav {
+      a[href="/"] {
+        img[src="/images/logo.png"] { }
+        // SassaaSSG
+      }
+
+      a.active[href="/"] { /* Home */ }
+      a[href="/about"] { /* About */ }
     }
 
-    a.active[href="/"] { /* Home */ }
-    a[href="/about"] { /* About */ }
-  }
+    header[role="heading"] {
+      h1 { /* Sass as a Static Site Generator */ }
+    }
 
-  header[role="heading"] {
-    h1 { /* Sass as a Static Site Generator */ }
-  }
+    main {
+      div.container {
+        /*
+          ## Home
 
-  main {
-    div.container {
+          Magna irure aute id proident mollit Lorem enim eiusmod nulla ipsum nostrud in qui. Eiusmod
+          do proident incididunt enim Lorem amet. Voluptate non nulla velit aliqua magna nostrud.
+          Pariatur laborum ea ipsum occaecat laboris reprehenderit officia pariatur deserunt quis
+          aliquip enim cupidatat. Incididunt pariatur eiusmod sunt ea non voluptate dolor sint ipsum
+          dolore anim voluptate nisi duis. Elit voluptate consectetur minim aliqua. Voluptate irure
+          adipisicing enim dolore culpa sit aliqua magna quis incididunt dolore duis.
+
+          Voluptate labore reprehenderit irure ut adipisicing quis ea qui non exercitation voluptate
+          tempor. Aute aliqua excepteur occaecat est sunt et ullamco in. Incididunt est cillum minim
+          tempor aliqua culpa adipisicing. Cillum mollit deserunt quis nulla sint esse ut esse
+          proident. Aliqua et fugiat minim irure est cupidatat ex.
+
+          Officia sunt sunt in aliquip ex aute quis esse ex duis. Lorem ullamco aute do occaecat
+          ullamco ipsum sunt nostrud voluptate aute Lorem adipisicing. Officia eiusmod incididunt
+          ipsum et sit minim ullamco sunt nisi cillum aute. Nostrud aliquip nostrud est ut aliquip
+          adipisicing sint Lorem nisi qui sint Lorem in. Aute minim dolore elit excepteur.
+        */
+      }
+    }
+
+    footer {
       /*
-        ## Home
-
-        Magna irure aute id proident mollit Lorem enim eiusmod nulla ipsum nostrud in qui. Eiusmod
-        do proident incididunt enim Lorem amet. Voluptate non nulla velit aliqua magna nostrud.
-        Pariatur laborum ea ipsum occaecat laboris reprehenderit officia pariatur deserunt quis
-        aliquip enim cupidatat. Incididunt pariatur eiusmod sunt ea non voluptate dolor sint ipsum
-        dolore anim voluptate nisi duis. Elit voluptate consectetur minim aliqua. Voluptate irure
-        adipisicing enim dolore culpa sit aliqua magna quis incididunt dolore duis.
-
-        Voluptate labore reprehenderit irure ut adipisicing quis ea qui non exercitation voluptate
-        tempor. Aute aliqua excepteur occaecat est sunt et ullamco in. Incididunt est cillum minim
-        tempor aliqua culpa adipisicing. Cillum mollit deserunt quis nulla sint esse ut esse
-        proident. Aliqua et fugiat minim irure est cupidatat ex.
-
-        Officia sunt sunt in aliquip ex aute quis esse ex duis. Lorem ullamco aute do occaecat
-        ullamco ipsum sunt nostrud voluptate aute Lorem adipisicing. Officia eiusmod incididunt
-        ipsum et sit minim ullamco sunt nisi cillum aute. Nostrud aliquip nostrud est ut aliquip
-        adipisicing sint Lorem nisi qui sint Lorem in. Aute minim dolore elit excepteur.
+        This idiotic idea was created by [Matthew Parry-Wilkes
+        (@tonicblue)](https://github.com/tonicblue).
       */
     }
-  }
-
-  footer {
-    /*
-      This idiotic idea was created by [Matthew Parry-Wilkes
-      (@tonicblue)](https://github.com/tonicblue).
-    */
   }
 }
