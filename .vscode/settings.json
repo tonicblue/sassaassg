@@ -1,0 +1,109 @@
+{
+  "todo-tree.general.showActivityBarBadge": true,
+  "todo-tree.general.statusBar": "tags",
+  "todo-tree.general.showIconsInsteadOfTagsInStatusBar": true,
+  "todo-tree.general.tags": [
+    "TODO:",
+    "DONE:",
+    "QUESTION:",
+    "BUG:",
+    "HACK:",
+    "ROBOT:",
+    "HOWTO:",
+    "[]",
+    "[ ]",
+    "[x]",
+    "[?]",
+    "@tonicblue"
+  ],
+  "todo-tree.general.tagGroups": {
+    "[]": [
+      "[]",
+      "[ ]",
+      "TODO:"
+    ],
+    "[x]": [
+      "[x]",
+      "DONE:"
+    ],
+    "[?]": [
+      "[?]",
+      "QUESTION:"
+    ]
+  },
+  "todo-tree.filtering.excludeGlobs": [
+    "**/node_modules/*/**",
+    "*.svg"
+  ],
+  "todo-tree.regex.regex": "(//|#|<!--|\\{\\{!--|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*($TAGS).*$",
+  "todo-tree.regex.subTagRegex": "(\\W@\\w+\\b)",
+  "todo-tree.regex.regexCaseSensitive": false,
+  "todo-tree.tree.buttons.groupBySubTag": true,
+  "todo-tree.highlights.useColourScheme": true,
+  "todo-tree.highlights.defaultHighlight": {
+    "foreground": "#272822",
+    "type": "tag-and-comment",
+    "gutterIcon": true,
+    "fontWeight": "bold",
+    "borderRadius": "2px",
+    "rulerLane": "center"
+  },
+  "todo-tree.highlights.customHighlight": {
+    "[]": {
+      "foreground": "#272822",
+      "background": "#A6E22E",
+      "iconColour": "#A6E22E",
+      "rulerColour": "#A6E22E",
+      "icon": "circle",
+    },
+    "[x]": {
+      "foreground": "#F8F8F2",
+      "background": "#75715E",
+      "iconColour": "#75715E",
+      "rulerColour": "#75715E",
+      "icon": "check-circle-fill",
+    },
+    "[?]": {
+      "foreground": "#272822",
+      "background": "#66D9EF",
+      "iconColour": "#66D9EF",
+      "rulerColour": "#66D9EF",
+      "icon": "question",
+    },
+    "BUG:": {
+      "foreground": "#272822",
+      "background": "#F92672",
+      "iconColour": "#F92672",
+      "rulerColour": "#F92672",
+      "icon": "bug"
+    },
+    "HACK:": {
+      "foreground": "#272822",
+      "background": "#FD971F",
+      "iconColour": "#FD971F",
+      "rulerColour": "#FD971F",
+      "icon": "hubot"
+    },
+    "ROBOT:": {
+      "foreground": "#272822",
+      "background": "#E6DB74",
+      "iconColour": "#E6DB74",
+      "rulerColour": "#E6DB74",
+      "icon": "copilot"
+    },
+    "HOWTO:": {
+      "foreground": "#272822",
+      "background": "#FFFFFF",
+      "iconColour": "#FFFFFF",
+      "rulerColour": "#FFFFFF",
+      "icon": "info"
+    },
+    "@tonicblue": {
+      "foreground": "#272822",
+      "background": "#AE81FF",
+      "iconColour": "#AE81FF",
+      "rulerColour": "#AE81FF",
+      "icon": "mail"
+    }
+  }
+}
