@@ -1,0 +1,25 @@
+head {
+  title {
+    // Welcome to my site
+  }
+  script { }
+}
+body.home.default-theme {
+  header[role="masthead"][disabled][data-active=true] {
+    nav {
+      a[href="/"] {
+        img {
+          color: #ff00ff;
+        }
+      }
+      a[href="/"] { /* Home */ }
+      a[href="/about"] {
+        /*
+          # Markdown test
+
+          How are multiline comments parsed?
+        */
+      }
+    }
+  }
+}
