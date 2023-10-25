@@ -4,12 +4,13 @@ import Gonzales, { Node } from 'gonzales-pe';
 import { Marked } from 'marked';
 import Dedent from 'dedent';
 
-type DomNode = [
-  openTag: string,
-  ...children: (DomNode | string)[],
-  closingTag: string,
+type DomNode = (string | string[])[];
+type DomNodeStack = [tag: string, level: number, node: DomNode][];
+
+const VOID_TAGS = [
+  'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source',
+  'track', 'wbr'
 ];
-type DomNodeStack = [level: number, node: DomNode][];
 
 runTests();
 
@@ -49,20 +50,23 @@ export function parseFile (path: string) {
 export function parse (scss: string, indent = false): [string, Node] {
   const ast = Gonzales.parse(scss, { syntax: 'scss' });
   const marked = new Marked();
-  const domRoot: DomNode = ['', ''];
-  const domNodeStack: DomNodeStack = [[0, domRoot]];
+  const domRoot: DomNode = [];
+  const domNodeStack: DomNodeStack = [['root', 0, domRoot]];
 
   ast.traverse((node, index, parent, level) => {
-    const [parentLevel, parentNode] = domNodeStack[domNodeStack.length - 1];
+    const [parentTag, parentLevel, parentNode] = domNodeStack[domNodeStack.length - 1];
 
-    const domNode = getDomNode(node, marked);
-    if (domNode) {
-      parentNode.splice(parentNode.length - 1, 0, domNode);
+    const [tag, domNode] = getDomNode(node, marked) || [];
+    if (tag && domNode) {
+      parentNode.push(domNode as string);
 
-      if (typeof domNode !== 'string') domNodeStack.push([level, domNode]);
+      if (typeof domNode !== 'string') domNodeStack.push([tag, level, domNode]);
     }
 
-    if (level <= parentLevel) domNodeStack.pop();
+    if (level <= parentLevel) {
+      domNodeStack.pop();
+      if (!VOID_TAGS.includes(parentTag)) parentNode.push(`</${parentTag}>`);
+    }
   });
 
   const html = (
@@ -76,13 +80,13 @@ export function parse (scss: string, indent = false): [string, Node] {
 
 
 
-function getDomNode (node: Node, marked: Marked) {
+function getDomNode (node: Node, marked: Marked): [string, DomNode | string] | void {
   const commentDomNode = (
     getSinglelineCommentDomNode(node) ||
     getMultilineCommentDomNode(node, marked)
   );
 
-  if (commentDomNode) return commentDomNode;
+  if (commentDomNode) return ['textNode', commentDomNode];
 
   if (!node.is('ruleset')) return;
 
@@ -119,12 +123,9 @@ function getDomNode (node: Node, marked: Marked) {
     ? ` ${attributes.join(' ')}`
     : ''
   );
-  const element: DomNode = [
-    `<${tag}${attributesHtml}>`,
-    `</${tag}>`,
-  ];
+  const element: DomNode = [`<${tag}${attributesHtml}>`];
 
-  return element;
+  return [tag, element];
 }
 
 
@@ -155,7 +156,7 @@ function flatten (domNode: DomNode) {
   while (i < domNodeCopy.length)
     if (Array.isArray(domNodeCopy[i]))
       if (
-        domNodeCopy[i].length <= 3 &&
+        domNodeCopy[i].length <= 2 &&
         typeof domNodeCopy[i][0] === 'string' &&
         (
           (
@@ -163,8 +164,7 @@ function flatten (domNode: DomNode) {
             domNodeCopy[i][1].indexOf('\n') === -1
           ) ||
           typeof domNodeCopy[i][1] === 'undefined'
-        ) &&
-        ['undefined', 'string'].includes(typeof domNodeCopy[i][2])
+        )
       ) domNodeCopy.splice(i, 1, (domNodeCopy[i] as string[]).join(''))
       else domNodeCopy.splice(i, 1, ...domNodeCopy[i]);
     else i++;
