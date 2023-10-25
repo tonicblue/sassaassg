@@ -24,6 +24,8 @@ export function runTests () {
       parseFile(Path.join(scssFilesDirectory, scssFile));
 }
 
+
+
 export function parseFile (path: string) {
   const basename = Path.basename(path, '.scss');
   const dirname = Path.dirname(path);
@@ -33,18 +35,18 @@ export function parseFile (path: string) {
   console.log(`Parsing file ${path} -> ${basename}.html & ${basename}.json`);
 
   const scss = FS.readFileSync(path).toString();
-  const [html, ast] = parse(scss);
-
-  FS.writeFileSync(outputHtmlPath, html);
-
+  const [html, ast] = parse(scss, true);
   const astJson = ast.toJson();
 
+  FS.writeFileSync(outputHtmlPath, html);
   FS.writeFileSync(outputAstPath, astJson);
 
   return [html, ast];
 }
 
-export function parse (scss: string): [string, Node] {
+
+
+export function parse (scss: string, indent = false): [string, Node] {
   const ast = Gonzales.parse(scss, { syntax: 'scss' });
   const marked = new Marked();
   const domRoot: DomNode = ['', ''];
@@ -56,16 +58,23 @@ export function parse (scss: string): [string, Node] {
     const domNode = getDomNode(node, marked);
     if (domNode) {
       parentNode.splice(parentNode.length - 1, 0, domNode);
+
       if (typeof domNode !== 'string') domNodeStack.push([level, domNode]);
     }
 
     if (level <= parentLevel) domNodeStack.pop();
   });
 
-  const html = recursiveFlatten(domRoot);
+  const html = (
+    indent
+      ? recursiveFlatten(domRoot)
+      : flatten(domRoot)
+  );
 
   return [html, ast];
 }
+
+
 
 function getDomNode (node: Node, marked: Marked) {
   const commentDomNode = (
@@ -118,10 +127,14 @@ function getDomNode (node: Node, marked: Marked) {
   return element;
 }
 
+
+
 function getSinglelineCommentDomNode (node: Node) {
   if (!node.is('singlelineComment')) return;
   else return Dedent(node.content as string);
 }
+
+
 
 function getMultilineCommentDomNode (node: Node, marked: Marked) {
   if (!node.is('multilineComment')) return;
@@ -133,6 +146,8 @@ function getMultilineCommentDomNode (node: Node, marked: Marked) {
   else return marked.parse(dedented) as string;
 }
 
+
+
 function flatten (domNode: DomNode) {
   const domNodeCopy = domNode.slice();
   let i = 0;
@@ -140,22 +155,24 @@ function flatten (domNode: DomNode) {
   while (i < domNodeCopy.length)
     if (Array.isArray(domNodeCopy[i]))
       if (
-        domNodeCopy.length <= 3 &&
-        typeof domNodeCopy[0] === 'string' &&
+        domNodeCopy[i].length <= 3 &&
+        typeof domNodeCopy[i][0] === 'string' &&
         (
           (
-            typeof domNodeCopy[1] === 'string' &&
-            domNodeCopy[1].indexOf('\n') === -1
+            typeof domNodeCopy[i][1] === 'string' &&
+            domNodeCopy[i][1].indexOf('\n') === -1
           ) ||
-          typeof domNodeCopy[1] === 'undefined'
+          typeof domNodeCopy[i][1] === 'undefined'
         ) &&
-        ['undefined', 'string'].includes(typeof domNodeCopy[2])
+        ['undefined', 'string'].includes(typeof domNodeCopy[i][2])
       ) domNodeCopy.splice(i, 1, (domNodeCopy[i] as string[]).join(''))
       else domNodeCopy.splice(i, 1, ...domNodeCopy[i]);
     else i++;
 
   return domNodeCopy.join('\n');
 }
+
+
 
 function recursiveFlatten (domNode: DomNode) {
   const html: string[] = [];
