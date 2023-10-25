@@ -1,25 +1,33 @@
 head {
-  title {
-    // Welcome to my site
-  }
-  script { }
+  title { /* Home */ }
 }
 body.home.default-theme {
-  header[role="masthead"][disabled][data-active=true] {
-    nav {
-      a[href="/"] {
-        img {
-          color: #ff00ff;
-        }
-      }
-      a[href="/"] { /* Home */ }
-      a[href="/about"] {
-        /*
-          # Markdown test
-
-          How are multiline comments parsed?
-        */
-      }
+  nav {
+    a[href="/"] {
+      img[src="/images/logo.png"] { }
+      // SassaaSSG
     }
+    a.active[href="/"] { /* Home */ }
+    a[href="/about"] { /* About */ }
+  }
+
+  header[role="heading"] {
+    h1 { /* Sass as a Static Site Generator */ }
+  }
+
+  main {
+    div.container {
+      /*
+        ## Home
+
+        Welcome to the demo site
+      */
+    }
+  }
+
+  footer {
+    /*
+      This idiotic idea was created by [Matthew Parry-Wilkes (@tonicblue)](https://github.com/tonicblue).
+    */
   }
 }
