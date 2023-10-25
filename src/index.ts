@@ -138,16 +138,16 @@ function flatten (domNode: DomNode) {
   while (i < domNodeCopy.length)
     if (Array.isArray(domNodeCopy[i]))
       if (
-        domNode.length <= 3 &&
-        typeof domNode[0] === 'string' &&
+        domNodeCopy.length <= 3 &&
+        typeof domNodeCopy[0] === 'string' &&
         (
           (
-            typeof domNode[1] === 'string' &&
-            domNode[1].indexOf('\n') === -1
+            typeof domNodeCopy[1] === 'string' &&
+            domNodeCopy[1].indexOf('\n') === -1
           ) ||
-          typeof domNode[1] === 'undefined'
+          typeof domNodeCopy[1] === 'undefined'
         ) &&
-        ['undefined', 'string'].includes(typeof domNode[2])
+        ['undefined', 'string'].includes(typeof domNodeCopy[2])
       ) domNodeCopy.splice(i, 1, (domNodeCopy[i] as string[]).join(''))
       else domNodeCopy.splice(i, 1, ...domNodeCopy[i]);
     else i++;
